@@ -18,4 +18,12 @@ public class FlightManager {
         ];
         return flights.size();        
     }
+    
+    public static List<Flight__c> getTrips (Id touristId) {
+        List<Flight__c> flights = [
+            SELECT Trip__c
+            FROM Flight__c 
+            WHERE Tourist__c !=: touristId];
+        return flights;        
+    }
 }

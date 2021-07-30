@@ -8,4 +8,15 @@ public class WeatherForecastManager {
         return ids;		
     }
     
+    public static Weather_Daily_Forecast__c getAverageTemperature(Id spacePoint) {
+        Weather_Daily_Forecast__c result = [
+            SELECT Id,
+            Average_Temperature__c
+            FROM Weather_Daily_Forecast__c
+            WHERE Date__c = TODAY
+            AND Space_Point__c = :spacePoint
+        ];
+        return result;
+    }
+    
 }

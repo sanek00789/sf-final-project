@@ -1,4 +1,4 @@
-public class TouristService {
+public without sharing class TouristService {
     
     public static void markDuplicates(List<Tourist__c> newTourists) {          
         if (newTourists == null || newTourists.isEmpty()) return;
@@ -53,4 +53,16 @@ public class TouristService {
             update newTourists;
         }
     }
+    
+    public static void createFlights(List<Id> touristIds, Id tripId) {          
+        List<Flight__c> newFlights = new List<Flight__c>();
+        for(Id touristId :touristIds) {
+            Flight__c newFlight = new Flight__c ();            
+            newFlight.Trip__c = tripId;            
+            newFlight.Tourist__c = touristId;
+            newFlight.Status__c = Constans.FLIGHT_STATUS_OFFER_PENDING;           
+            newFlights.add(newFlight);
+        }
+        insert newFlights;
+    }   
 }

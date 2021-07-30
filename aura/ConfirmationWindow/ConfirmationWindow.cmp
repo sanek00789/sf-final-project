@@ -1,0 +1,36 @@
+<aura:component implements="flexipage:availableForAllPageTypes" access='global'>    
+    <aura:attribute name="title" type="String" default="" />
+    <aura:attribute name="message" type="String" default="" />
+    
+    <aura:registerEvent name="clickYes" type="c:ConfirmationWindowClickYes"/>
+    <aura:registerEvent name="clickNo" type="c:ConfirmationWindowClickNo"/>
+    
+    <div class="confWind">
+        <section role="dialog" 
+                 tabindex="-1" 
+                 class="slds-modal slds-modal_x-small slds-fade-in-open" 
+                 aria-labelledby="modal-heading-01" 
+                 aria-modal="true" 
+                 aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{!v.title}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium slds-p-left_large" id="modal-content-id-1">
+                    <p class="slds-text-align_center">{!v.message}</p>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning:button class="slds-button slds-button_netral" 
+                                      name='No' 
+                                      label='No' 
+                                      onclick='{!c.handleClickNo}'/>
+                    <lightning:button class="slds-button slds-button_brand " 
+                                      name='Yes' 
+                                      label='Yes' 
+                                      onclick='{!c.handleClickYes}' />                    
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>		
+</aura:component>

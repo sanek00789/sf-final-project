@@ -1,0 +1,78 @@
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global" controller="TouristAssignmentController" >
+    <aura:attribute name="selectedId" type="String" default="" access="public"/>
+    <aura:attribute name="trips" type="Trip__c[]" access="private"/>
+    <aura:attribute name="selectedTripId" type="String" access="private"/>
+    <aura:attribute name="showModal" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="mapMarkers" type="Object" access="private"/>
+    <aura:attribute name="showDetails" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="selectedTrip" type="Trip__c" access="public"/>
+    <aura:attribute name="backgroundImageURL" type="String" default="" access="private"/>
+    <aura:attribute name="title" type="String" default="{!$Label.c.Confirmation}" access="private"/>
+    <aura:attribute name="message" type="String" default="{!$Label.c.confirmationFlightCreation}" access="private"/>
+    
+    <aura:handler name="change" value="{!v.selectedId}" action="{!c.fetchTrips}"/>
+    <aura:handler name="clickYes" event="c:ConfirmationWindowClickYes" action="{!c.onSubmit}"/>
+    <aura:handler name="clickNo" event="c:ConfirmationWindowClickNo" action="{!c.onCancel}"/>
+    
+    <lightning:layout> 
+        <lightning:layoutItem size="12">
+            <lightning:card class="slds-p-horizontal_medium slds-m-vertical_medium">                
+                <c:LookupField objectAPIName="Tourist__c" 
+                               label="Relate to"
+                               returnFields="['Name','Age__c','Gender__c']"                               
+                               selectedId="{!v.selectedId}"
+                               filter="CreatedDate > 2001-01-01T00:00:01Z"/>
+            </lightning:card>         
+        </lightning:layoutItem>        
+    </lightning:layout>
+    
+    <lightning:layout verticalAlign="stretch" multipleRows="true" class="x-large">        
+        <aura:iteration items="{!v.trips}" var="trip" indexVar="idx">
+            <lightning:layoutItem size="3">
+                <div class="tile">   
+                    <div style="{!'background:' + v.backgroundColor + ' url(' + v.backgroundImageURL + '/' + trip.Name + '.jpg' + ') no-repeat;background-position: center;background-size: cover;'}" 
+                         class="card" 
+                         data-record="{!idx}" 
+                         onclick="{!c.getTripDetails}">
+                        <div class="demo-only" style="background:#e4e4e4">
+                            <div class="cardName">{!trip.Name}</div>
+                        </div>
+                    </div>
+                </div>
+            </lightning:layoutItem>
+        </aura:iteration>         
+    </lightning:layout>
+    
+    <aura:if isTrue="{!v.showDetails}">
+        <lightning:card class="slds-p-horizontal_x-large slds-p-around_small slds-m-vertical_medium" title="Trip Details" >
+            <lightning:layout>
+                <lightning:layoutItem  size="10">
+                    <c:TripDetails selectedTrip="{!v.selectedTrip}"/>
+                </lightning:layoutItem>
+                
+                <lightning:layoutItem padding="around-small" size="2">
+                    <lightning:card>
+                        <div class="slds-align_absolute-center" >
+                            <lightning:button variant="brand" 
+                                              iconName="utility:record_create" 
+                                              label="Submit" 
+                                              title="Submit" 
+                                              onclick="{! c.clickCreate }" 
+                                              class="slds-m-around_x-small slds-m-around_medium slds-float_right"/>
+                        </div>
+                    </lightning:card>
+                </lightning:layoutItem>    
+            </lightning:layout>
+            
+            <lightning:layoutItem padding="around-small" size="12">
+                <lightning:card>
+                    <lightning:map mapMarkers="{! v.mapMarkers }" zoomLevel="6"/>
+                </lightning:card>
+            </lightning:layoutItem>
+        </lightning:card>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.showModal}">
+        <c:ConfirmationWindow title="{!v.title}" message="{!v.message}"/>
+    </aura:if>
+</aura:component>

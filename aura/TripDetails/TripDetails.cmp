@@ -1,0 +1,39 @@
+<aura:component controller="TripDetailsController">        
+    <aura:attribute name="selectedTrip" type="String" access="public"/>    
+    <aura:attribute name="selectedSpacePoint" type="Space_Point__c" access="private"/>    
+    <aura:attribute name="averageTemperature" type="Decimal" access="private"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="change" value="{!v.selectedTrip}" action="{!c.doInit}"/>
+    
+    <lightning:card>
+        <lightning:layout>
+            <lightning:layoutItem  size="5">
+                <div class="slds-grid slds-gutters slds-m-left_large">
+                    <div class="slds-col ">
+                        <span>
+                            <h3 class="slds-text-heading--medium slds-truncate">{!v.selectedTrip.Name}</h3> 
+                            <p><b>{!$Label.c.StartDate}:  </b><ui:outputText value="{!v.selectedTrip.Start_Date__c}"/></p>
+                            <p><b>{!$Label.c.EndDate}:  </b><ui:outputText value="{!v.selectedTrip.End_Date__c}"/></p>
+                            <p><b>{!$Label.c.MinimumAge}:  </b><ui:outputText value="{!v.selectedTrip.Minimum_Age__c}"/></p>                    
+                        </span>
+                    </div>
+                    <div class="slds-col row slds-card slds-box">
+                        <span>
+                            <h3 class="slds-text-heading--medium slds-truncate"> </h3>
+                            <p><b>   </b><ui:outputText /></p>
+                            <p><b>Seats:  </b><ui:outputText value="{!v.selectedTrip.Seats__c}"/></p>                                    
+                            <p><b>{!$Label.c.DepartureSpacePoint}:  </b><ui:outputText value="{!v.selectedSpacePoint.City__c}"/></p>
+                        </span>
+                    </div>
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small" size="5">
+                <div class="slds-card">
+                    <h4 class="slds-text-align_center slds-truncate">{!$Label.c.TemperatureToday}: </h4>
+                    <div class="slds-text-align_center slds-truncate" style="font-size: 3em" ><p>  {!v.averageTemperature} C </p> </div>                   
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </lightning:card>    
+</aura:component>

@@ -1,0 +1,36 @@
+<apex:page showheader="false" sidebar="false" standardController="Trip__c"
+           extensions="TripInfo_Controller" lightningStylesheets="true">
+        <apex:pageBlock title="Trip Information"> 
+        <apex:pageBlockSection title="Trip information" columns="2">                
+            <apex:outputField value="{!Trip__c.Name}"/>
+            <apex:outputField value="{!Trip__c.Start_Date__c}"/>
+            <apex:outputField value="{!Trip__c.Minimum_Age__c}"/>
+            <apex:outputField value="{!Trip__c.CreatedDate}"/>
+            <apex:outputField value="{!Trip__c.OwnerId}"/>                
+        </apex:pageBlockSection> 
+        <apex:pageBlockSection > 
+            <apex:form style="text-align: center" > 
+                <apex:commandButton value="Edit" action="{!Edit}" id="buttonEdit"/>
+            </apex:form>
+        </apex:pageBlockSection> 
+        <apex:pageBlockSection title="Related flights to the trip">
+            <apex:relatedList list="Flights__r"/>
+        </apex:pageBlockSection>        
+        <apex:pageBlockSection title="Tourists registered for the trip">
+            <apex:pageBlockTable value="{!Trip__c.Flights__r}" var="flight">
+                <apex:column value="{!flight.Tourist__r.Name}"/>
+                <apex:column value="{!flight.Tourist__r.Birthdate__c}"/>
+                <apex:column value="{!flight.Tourist__r.Age__c}"/>
+                <apex:column value="{!flight.Tourist__r.Email__c}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+            <apex:pageBlockSection title="Tourists registered for the trip">
+            <apex:pageBlockTable value="{!notRelatedTourist}" var="tourist">
+                <apex:column value="{!tourist.Name}"/>
+                <apex:column value="{!tourist.Birthdate__c}"/>
+                <apex:column value="{!tourist.Age__c}"/>
+                <apex:column value="{!tourist.Email__c}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:page>

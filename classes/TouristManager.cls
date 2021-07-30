@@ -57,7 +57,7 @@ public class TouristManager {
             WHERE Name =: names AND Email__c =: emails];
         return recordsTourists;
     }
-    
+     
     public static List<Tourist__c> getActive () {
         List<Tourist__c> listTourists = [
             SELECT Id, 
@@ -142,9 +142,18 @@ public class TouristManager {
             AND Id NOt IN (
                 SELECT Tourist__c 
                 FROM Flight__c
-                WHERE Trip__r.Start_Date__c <=: trip.Start_Date__c AND Trip__r.End_Date__c >= :trip.Start_Date__c)
+                WHERE Trip__r.Start_Date__c <=: trip.Start_Date__c AND Trip__r.End_Date__c >= :trip.Start_Date__c)            
         ];                
         return result;
+    }
+
+    public static List<Tourist__c> getName (String searchKeyWord) {
+        List<Tourist__c> tourists = [
+            SELECT Name            	    
+            FROM Tourist__c
+            WHERE Name LIKE :searchKeyWord
+        ];
+        return tourists;
     }
     
 }

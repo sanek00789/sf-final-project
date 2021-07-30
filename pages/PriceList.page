@@ -1,0 +1,42 @@
+<apex:page standardController="Tourist__c"  extensions="PriceList_Controller" renderAs="pdf">
+    <h1>Price list</h1>
+    
+    <h4>Details of trips:</h4>
+    
+    <table cellpadding="7" border="2" width="100%" class="slds-table slds-table_cell-buffer slds-table_bordered">
+        <thead bgcolor="#c0c0c0">
+            <tr class="slds-line-height_reset">
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="Trip Name">Trip Name</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="Start Date">Start Date</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="Space Point">Space Point</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="Price">Price</div>
+                </th>      
+            </tr>
+        </thead>
+        <tbody>
+            <apex:repeat value="{!prices}" var="price" >  
+                <tr class="slds-hint-parent">
+                    <th data-label="Trip Name" scope="col">
+                        <div class="slds-truncate" title="4/14/2015">{!price.Trip__r.Name}</div>        
+                    </th>
+                    <td data-label="Account Name">
+                        <div class="slds-truncate" title="Start Date">{!price.Trip__r.Start_Date__c}</div>
+                    </td>
+                    <td data-label="Space Point">
+                        <div class="slds-truncate" title="Space Point">{!price.Trip__r.Departure_Space_Point__r.City__c}</div>
+                    </td>
+                    <td data-label="Price">
+                        <div class="slds-truncate" title="Price">{!price.UnitPrice}</div>
+                    </td>
+                </tr>    
+            </apex:repeat>
+        </tbody>
+    </table>   
+</apex:page>

@@ -1,0 +1,82 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global" controller="RegTouristsForTripController">	
+    <aura:attribute name="recordId" type="Id" access="public"/>
+    <aura:attribute name="tourists" type="Tourist__c[]" access="private"/>
+    <aura:attribute name="touristColumns" type="List" access="private"/>
+    <aura:attribute name="Trip__c" type="Trip__c" access="private"/>    
+    <aura:attribute name="selectedTouristsIds" type="Id[]" access="private"/>    
+    <aura:attribute name="today" type="Date" access="private"/>
+    <aura:attribute name="showModal" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="showSpinner" type="Boolean" access="private"/>    
+    <aura:attribute name="openService" type="Boolean" default="true" access="private"/>
+    <aura:attribute name="record" type="Object" access="private"/>
+    <aura:attribute name="simpleRecord" type="Object" access="private"/>
+    <aura:attribute name="recordError" type="String" access="private"/>
+    <aura:attribute name="title" type="String" default="{!$Label.c.Confirmation}" access="private"/>
+    <aura:attribute name="message" type="String" default="{!$Label.c.confirmationFlightCreation}" access="private"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>    
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    <aura:handler name="clickYes" event="c:ConfirmationWindowClickYes" action="{!c.onSubmit}"/>
+    <aura:handler name="clickNo" event="c:ConfirmationWindowClickNo" action="{!c.onCancel}"/>
+    
+    <c:QuickActionBodiless/>
+    
+    <force:recordData aura:id="recordLoader"
+                      fields="Name,Minimum_Age__c,Number_Free_Seats__c,Start_Date__c"
+                      recordId="{!v.recordId}"
+                      targetFields="{!v.simpleRecord}"
+                      targetError="{!v.recordError}"
+                      recordUpdated = "{! c.onRecordUpdated}"                       
+                      />
+    
+    <aura:if isTrue="{!not(v.showModal)}">
+        <lightning:layout> 
+            <lightning:layoutItem >
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Free and suitable tourists</h2>
+                </header>                
+                
+                <aura:if isTrue="{!and(not(empty(v.tourists)), v.openService)}">                    
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning:datatable aura:id="touristTable"
+                                             data="{! v.tourists }"
+                                             columns="{! v.touristColumns }"                             
+                                             keyField="id"
+                                             onrowselection="{! c.getSelectedName }"
+                                             />
+                    </div>
+                    <div class="slds-modal__footer">        
+                        <lightning:button variant="neutral" label="Cancel" onclick="{! c.clickCancel }" />      
+                        <lightning:button variant="brand" 
+                                          iconName="utility:record_create" 
+                                          label="Add to Trip" 
+                                          title="Add to Trip" 
+                                          onclick="{! c.clickCreate }" 
+                                          class="slds-m-around_x-small slds-m-around_medium"/>
+                    </div>                    
+                    
+                    <aura:set attribute="else">                        
+                        <div class="slds-p-around_medium slds-p-left_large">
+                            <p class="slds-text-align_center slds-text-heading_medium">{!$Label.c.serviceUnavailable}</p>
+                            <p class="slds-text-align_center slds-text-heading_small">{!$Label.c.allSeatsTaken}</p>                        
+                            <div class="slds-modal__footer">        
+                                <lightning:button variant="neutral" label="Cancel" onclick="{! c.clickCancel }" />
+                            </div>
+                        </div>
+                    </aura:set>
+                </aura:if>   
+                
+                <aura:if isTrue="{!v.showSpinner}">
+                    <lightning:spinner variant="brand" size="medium" class="spins" />
+                </aura:if>     
+                
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.showModal}">
+        <c:ConfirmationWindow title="{!v.title}" message="{!v.message}"/>           
+    </aura:if>
+    
+</aura:component>

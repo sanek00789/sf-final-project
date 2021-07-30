@@ -9,5 +9,15 @@ public class SpacePointManager {
         ];        
         return spasePoints;		
     }
+    
+    public static List<Space_Point__c> getCityAndCountry(Id spacePointId) {
+        List<Space_Point__c> spasePoint = [
+            SELECT City__c,
+            		Country__c
+            FROM Space_Point__c
+            WHERE Id =: spacePointId            
+        ];        
+        return spasePoint;		
+    }
 
 }
